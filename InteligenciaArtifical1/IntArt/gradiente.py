@@ -30,3 +30,4 @@ plt.xlabel('x')
 plt.ylabel('f(x)')
 plt.title('gradiente descendiente en funcionamiento')
 plt.show()
+##buscar la respuesta a porque se estanca el algoritmo en ciertos puntos
