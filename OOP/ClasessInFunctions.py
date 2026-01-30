@@ -1,0 +1,10 @@
+#Class inside functions
+def format_string(string, formatter=None): #Pictonyc way to create default parameters-ojects
+    '''Format a string using the formater object, wich is expect to have a format() method to accepts string'''
+    class DefaultFormater:
+        '''Format a string in title case.'''
+        def format(self,string): #this code is no executed until we call format() function
+            return str(string).title()
+    if not formatter: #we are looking for an Object expected as a parameter, it was defined an Object
+        formatter=DefaultFormater() #buts has 'None' type cause we have to rebid formatter to
+    return formatter.format(string) #DefaultFormatter object, and return the method format()
