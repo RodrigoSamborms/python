@@ -83,3 +83,6 @@ AssertionError: Radius must be nonzero and non-negative
 >>> Circle.radius                    
 5
 ```
+Diagrama de clases del progrma FuzzyBool
+
+![Diagrama de Clases](../imagenes/oop004.jpg)
