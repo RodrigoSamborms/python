@@ -1,83 +1,87 @@
-import re
-class AnalizadorSintactico:
-    def _init_(self, texto):
-        # Tokenizador simple para separar números y operadores
-        self.tokens = re.findall(r'\d+|[+\-*/()]', texto)
-        self.pos = 0
-        self.token_actual = self.tokens[0] if self.tokens else None
+# Variables globales
+PREANALISIS = None
+posicion = 0
+cadena = ""
 
-    def error(self):
-        raise Exception(f"Error de sintaxis en el token: '{self.token_actual}'")
-
-    def consumir(self, token_esperado):
-        if self.token_actual == token_esperado:
-            self.pos += 1
-            if self.pos < len(self.tokens):
-                self.token_actual = self.tokens[self.pos]
-            else:
-                self.token_actual = None # Fin de la cadena
-        else:
-            self.error()
-
-    # --- Funciones de la Gramática ---
-
-    def expr(self):
-        # expr -> term resto_expr
-        self.term()
-        self.resto_expr()
-
-    def resto_expr(self):
-        # resto_expr -> + term resto_expr | - term resto_expr | epsilon
-        if self.token_actual == '+':
-            self.consumir('+')
-            self.term()
-            self.resto_expr()
-        elif self.token_actual == '-':
-            self.consumir('-')
-            self.term()
-            self.resto_expr()
-        else:
-            pass # Epsilon (no hacer nada)
-
-    def term(self):
-        # term -> factor resto_term
-        self.factor()
-        self.resto_term()
-
-    def resto_term(self):
-        # resto_term -> * factor resto_term | / factor resto_term | epsilon
-        if self.token_actual == '*':
-            self.consumir('*')
-            self.factor()
-            self.resto_term()
-        elif self.token_actual == '/':
-            self.consumir('/')
-            self.factor()
-            self.resto_term()
-        else:
-            pass # Epsilon
-
-    def factor(self):
-        # factor -> ( expr ) | digito
-        if self.token_actual == '(':
-            self.consumir('(')
-            self.expr()
-            self.consumir(')')
-        elif self.token_actual and self.token_actual.isdigit():
-            self.consumir(self.token_actual)
-        else:
-            self.error()
-
-# --- Prueba ---
-entrada = "3 + 5 * ( 2 - 8 )"
-parser = AnalizadorSintactico(entrada)
-
-try:
-    parser.expr()
-    if parser.token_actual is None:
-        print("¡Éxito! La cadena es sintácticamente correcta.")
+def obtener_siguiente_token():
+    """Obtiene el siguiente token de la cadena"""
+    global PREANALISIS, posicion
+    if posicion < len(cadena):
+        PREANALISIS = cadena[posicion]
     else:
-        print("Error: Se esperaba el fin de la cadena.")
-except Exception as e:
-    print(e)
+        PREANALISIS = None  # Fin de cadena
 
+def coincidir(token_esperado):
+    """Verifica que el token actual coincida con el esperado y avanza"""
+    global PREANALISIS, posicion
+    if PREANALISIS == token_esperado:
+        posicion += 1
+        obtener_siguiente_token()
+    else:
+        raise SyntaxError(f"Cadena no pertenece al lenguaje")
+
+def Lista():
+    digito()
+    Resto_lista()
+
+def Resto_lista():
+    if PREANALISIS == '+':
+        coincidir('+')
+        digito()
+        Resto_lista()
+    elif PREANALISIS == '-':
+        coincidir('-')
+        digito()
+        Resto_lista()
+    else:
+        pass #cadena vacia para remarcar
+
+def digito():
+    if PREANALISIS == '0':
+        coincidir('0')
+    elif PREANALISIS == '1':
+        coincidir('1')
+    elif PREANALISIS == '2':
+        coincidir('2')
+    elif PREANALISIS == '3':
+        coincidir('3')
+    elif PREANALISIS == '4':
+        coincidir('4')
+    elif PREANALISIS == '5':
+        coincidir('5')
+    elif PREANALISIS == '6':
+        coincidir('6')
+    elif PREANALISIS == '7':
+        coincidir('7')
+    elif PREANALISIS == '8':
+        coincidir('8')
+    elif PREANALISIS == '9':
+        coincidir('9')
+    else:
+        raise SyntaxError(f"Cadena no pertenece al lenguaje")
+
+def analizar(entrada):
+    """Función principal del analizador"""
+    global PREANALISIS, posicion, cadena
+    
+    cadena = entrada
+    posicion = 0
+    PREANALISIS = None
+    
+    obtener_siguiente_token()
+    
+    try:
+        Lista()
+        
+        # Verificar que se consumió toda la entrada
+        if PREANALISIS is not None:
+            raise SyntaxError(f"Cadena no pertenece al lenguaje")
+        
+        print("Cadena pertenece al lenguaje")
+    except SyntaxError:
+        print("Cadena no pertenece al lenguaje")
+
+# Entrada del usuario
+if __name__ == "__main__":
+    cadena_usuario = input("Ingrese la cadena a analizar: ")
+    analizar(cadena_usuario)
