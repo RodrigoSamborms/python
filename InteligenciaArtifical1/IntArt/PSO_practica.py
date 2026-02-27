@@ -1,8 +1,9 @@
 import numpy as np
 
-# Función objetivo (función de esfera)
+# Función objetivo (función de Booth)
+# Mínimo global en (1, 3) con valor 0
 def funcion_objetivo(x):
-    return np.sum(x**2)
+    return (x[0] + 2*x[1] - 7)**2 + (2*x[0] + x[1] - 5)**2
 
 # Parámetros del algoritmo
 num_particulas = 30
