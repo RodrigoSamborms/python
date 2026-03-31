@@ -32,7 +32,7 @@ class Solution:
             return head #indica que la lista esta vacia
 
         nodos_vistos = set() #registramos los datos para verificar si estan duplicados
-        actual = head #inicializamos la configuración para recorrer la lista simplemente enlazada
+        actual = head #inicializamos la configuracion para recorrer la lista simplemente enlazada
         nodos_vistos.add(actual.data) #Guardamos el primer dato en la varible conjunto
         
         # Recorremos la lista
@@ -41,7 +41,7 @@ class Solution:
                 # Si el dato ya fue visto, saltarse el nodo (eliminar)
                 actual.next = actual.next.next #eliminamos
             else:
-                # Si es nuevo, añadir al set y mover el puntero
+                # Si es nuevo, anadir al set y mover el puntero
                 nodos_vistos.add(actual.next.data)
                 actual = actual.next
 

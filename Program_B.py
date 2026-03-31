@@ -29,32 +29,7 @@ class Solution:
                                                     #arbol tienen altura 0
     def levelOrder(self,root):
         #Write your code here
-        if root is None:
-            return []
-
-        resultado = []
-        cola = [root]
-        inicio = 0
-
-        while inicio < len(cola):
-            nivel_actual = []
-            elementos_en_nivel = len(cola) - inicio
-
-            for _ in range(elementos_en_nivel):
-                nodo = cola[inicio]
-                inicio += 1
-                nivel_actual.append(nodo.data)
-
-                if nodo.left is not None:
-                    cola.append(nodo.left)
-                if nodo.right is not None:
-                    cola.append(nodo.right)
-
-            resultado.append(nivel_actual)
-
-        salida = " ".join(str(valor) for nivel in resultado for valor in nivel)
-        print(salida)
-        return resultado                                           
+        pass                                           
 
 T=int(input())
 myTree=Solution()
@@ -62,6 +37,5 @@ root=None
 for i in range(T):
     data=int(input())
     root=myTree.insert(root,data)
-#height=myTree.getHeight(root)
-#print(height)
-myTree.levelOrder(root)
+height=myTree.getHeight(root)
+print(height)       
