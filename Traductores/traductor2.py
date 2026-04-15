@@ -34,6 +34,14 @@ def Resto_lista():
         coincidir('-')
         digito()
         Resto_lista()
+    elif PREANALISIS == '*':
+        coincidir('*')
+        digito()
+        Resto_lista()
+    elif PREANALISIS == '/':
+        coincidir('/')
+        digito()
+        Resto_lista()
     else:
         pass #cadena vacia para remarcar
 
