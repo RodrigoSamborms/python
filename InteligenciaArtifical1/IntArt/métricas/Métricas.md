@@ -260,15 +260,116 @@ Ambas están soportadas automáticamente.
 
 ---
 
+## Conversión de Imágenes a PGM
+
+### Descripción
+
+El programa **PGM_conversion.py** facilita la conversión de imágenes en diferentes formatos (JPG, PNG, BMP, TIFF, etc.) al formato PGM requerido por los programas de métricas. También permite crear imágenes de prueba sin necesidad de archivos externos.
+
+### ⚠️ Requisito: Librería Pillow
+
+Para convertir imágenes desde formatos externos, este programa **REQUIERE** la librería **Pillow (PIL)**.
+
+#### Instalación de Pillow:
+
+```powershell
+# Asegúrate de tener el venv activado
+..\..\..\Scripts\Activate.ps1
+
+# Instala Pillow
+pip install Pillow
+```
+
+**Nota:** Sin Pillow instalado, el programa funcionará en modo limitado (solo creación de imágenes de prueba).
+
+### Características
+
+- ✅ Convertir imágenes JPG, PNG, BMP, TIFF, etc. → PGM
+- ✅ Crear imágenes de prueba (sin PIL): gradiente, cuadros, círculo
+- ✅ Soportar formatos PGM: P2 (texto) y P5 (binario)
+- ✅ Mostrar información sobre imágenes
+- ✅ Conversión automática a escala de grises
+
+### Instrucciones de Uso
+
+#### Opción 1: Convertir una imagen existente (requiere Pillow)
+
+```powershell
+cd c:\Users\sambo\Documents\Programacion\GitHub\python\InteligenciaArtifical1\IntArt\métricas
+
+# Convertir JPG a PGM
+python PGM_conversion.py -i foto.jpg -o foto.pgm
+
+# Especificar formato de salida
+python PGM_conversion.py -i foto.jpg -o foto.pgm --formato P5
+```
+
+#### Opción 2: Crear imágenes de prueba (sin Pillow requerido)
+
+```powershell
+# Crear gradiente horizontal
+python PGM_conversion.py --crear gradiente -o test_gradiente.pgm
+
+# Crear patrón de cuadros
+python PGM_conversion.py --crear cuadros -o test_cuadros.pgm
+
+# Crear círculo
+python PGM_conversion.py --crear circulo -o test_circulo.pgm
+
+# Especificar dimensiones personalizadas
+python PGM_conversion.py --crear gradiente -o test.pgm --ancho 512 --alto 512
+```
+
+#### Opción 3: Obtener información de una imagen
+
+```powershell
+python PGM_conversion.py -i foto.jpg --info
+```
+
+### Salida Esperada
+
+**Conversión de imagen:**
+```
+Estado de PIL: Disponible ✓
+
+✓ Imagen convertida exitosamente
+  Dimensiones: 512x512
+  Formato de salida: P5
+  Archivo: foto.pgm
+```
+
+**Creación de imagen de prueba:**
+```
+Estado de PIL: Disponible ✓
+
+✓ Imagen de prueba creada: gradiente
+  Dimensiones: 256x256
+  Archivo: test_gradiente.pgm
+```
+
+### Formatos Soportados para Conversión
+
+Con Pillow instalado, puedes convertir desde:
+- JPG/JPEG
+- PNG
+- BMP
+- TIFF
+- GIF
+- Y muchos otros formatos soportados por PIL
+
+---
+
 ## Notas Importantes
 
-- **Sin dependencias externas**: Todos los programas utilizan solo bibliotecas estándar de Python
-- **Compatibilidad**: Los programas funcionan con Python 3.x
+- **MSE, PSNR, SSIM**: Sin dependencias externas, solo librerías estándar de Python
+- **PGM_conversion**: REQUIERE Pillow para convertir desde otros formatos
+- **Compatibilidad**: Todos los programas funcionan con Python 3.x
 - **Imágenes idénticas**: 
   - MSE retorna 0
   - PSNR retorna Infinito
   - SSIM retorna 1.0
 - **Tamaño de ventana SSIM**: El programa ajusta automáticamente si es mayor que las dimensiones de la imagen
+- **Modo degradado**: PGM_conversion puede crear imágenes de prueba incluso sin Pillow, pero no puede convertir otros formatos
 
 ---
 
