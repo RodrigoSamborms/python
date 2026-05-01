@@ -42,10 +42,6 @@ Salida esperada (TAC):
     t1 := x + 2
     y := t1
 
-Si quieres, puedo:
- - Añadir ejemplos multi-línea y lectura de fichero.
- - Incluir verificación de tipos y mensajes de error más detallados.
-
 """
 
 import re

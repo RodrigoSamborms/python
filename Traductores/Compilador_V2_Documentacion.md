@@ -1,54 +1,55 @@
 # Documentación de `Compilador_V2.py`
 
-## Descripción general
+## Portada
 
-`Compilador_V2.py` es un analizador léxico y sintáctico que verifica si una entrada pertenece a la gramática base solicitada y, si es correcta, genera código de tres direcciones (TAC).
+**Nombre del programa:** `Compilador_V2.py`  
+**Propósito:** analizar una entrada conforme a la gramática definida y generar código de tres direcciones (TAC).  
+**Tipo de entrada:** consola o archivo `.txt` con soporte multi-línea.
 
-El programa acepta:
-- Entrada directa por consola.
-- Entrada desde un archivo `.txt`.
-- Programas escritos en varias líneas.
+## Objetivo
 
-## Funcionalidad
+El objetivo del programa es comprobar si un texto de entrada pertenece a la gramática implementada y, en caso afirmativo, producir una representación intermedia en forma de código de tres direcciones. Este enfoque permite separar el análisis sintáctico de la generación de código.
 
-El flujo del programa es el siguiente:
+## Funcionamiento general
 
-1. Lee la entrada desde un archivo `.txt`, desde `stdin` o desde el texto pegado en consola.
-2. Divide la entrada en tokens usando un lexer basado en expresiones regulares.
-3. Analiza la estructura del programa siguiendo la gramática implementada.
-4. Si la sintaxis es válida, imprime el mensaje `Cadena pertenece al lenguaje`.
-5. Genera e imprime código de tres direcciones.
+El programa trabaja en cuatro etapas:
 
-## Gramática soportada
+1. Lee la entrada desde un archivo `.txt`, desde `stdin` o desde el texto escrito en consola.
+2. Convierte el contenido en tokens usando un analizador léxico basado en expresiones regulares.
+3. Verifica la estructura del programa mediante un parser recursivo-descendente.
+4. Si la entrada es válida, imprime el mensaje de aceptación y genera TAC.
 
-El compilador reconoce, entre otros, estos elementos:
+## Elementos reconocidos por el compilador
 
-- `begin` y `end` para delimitar el programa.
-- Declaraciones con `entero` y `real`.
-- Listas de variables separadas por coma.
-- Asignaciones con `:=`.
-- Expresiones aritméticas con `+`, `-`, `*`, `/` y paréntesis.
-- Estructuras de control como `if`, `else`, `while` y `endwhile`.
+El analizador reconoce los siguientes componentes:
+
+- Palabras clave: `begin`, `end`, `entero`, `real`, `if`, `else`, `while`, `endwhile`.
+- Identificadores: nombres de variables como `x`, `contador` o `var1`.
+- Números enteros y reales: por ejemplo `5` o `3.14`.
+- Operadores aritméticos: `+`, `-`, `*`, `/`.
+- Operadores relacionales: `=`, `<`, `>`, `<=`, `>=`, `<>`.
+- Asignación: `:=`.
+- Delimitadores: `(`, `)`, `,` y `;`.
 
 ## Instrucciones de ejecución
 
-### 1. Ejecutar con un archivo `.txt`
+### Ejecución con archivo `.txt`
 
 ```powershell
 python Compilador_V2.py prueba_compilador.txt
 ```
 
-Donde `prueba_compilador.txt` contiene el programa a analizar.
+En este caso, el archivo `prueba_compilador.txt` debe contener el programa a analizar.
 
-### 2. Ejecutar pegando el programa en consola
+### Ejecución desde consola
 
 ```powershell
 python Compilador_V2.py
 ```
 
-Después puedes pegar el programa completo. En Windows, si el programa espera entrada por consola, se puede finalizar con `Ctrl+Z` y luego `Enter`.
+Después de ejecutar el comando, puedes pegar el programa completo. Si el sistema está esperando entrada estándar, en Windows puedes finalizarla con `Ctrl+Z` y luego `Enter`.
 
-### 3. Ejemplo de entrada multi-línea
+## Ejemplo de programa multi-línea
 
 ```text
 begin
@@ -60,9 +61,49 @@ z := y / 2;
 end
 ```
 
-## Salida esperada
+## Ejemplo paso a paso
 
-Si la entrada es correcta, el programa muestra algo como:
+### 1. Entrada
+
+```text
+begin
+entero x, y;
+real z;
+x := 5;
+y := ( x + 2 );
+z := y / 2;
+end
+```
+
+### 2. Análisis léxico
+
+El programa separa la entrada en tokens. Por ejemplo:
+
+- `begin`
+- `entero`
+- `x`
+- `,`
+- `y`
+- `;`
+- `real`
+- `z`
+- `;`
+- `x`
+- `:=`
+- `5`
+
+### 3. Análisis sintáctico
+
+El parser valida que el texto siga la estructura esperada:
+
+- Inicia con `begin`.
+- Contiene declaraciones válidas.
+- Contiene órdenes válidas.
+- Finaliza con `end`.
+
+### 4. Generación de código de tres direcciones
+
+Si la entrada es válida, se produce una salida similar a esta:
 
 ```text
 Cadena pertenece al lenguaje
@@ -78,15 +119,21 @@ t2 := y / 2
 z := t2
 ```
 
-## Formato de los archivos `.txt`
+## Resultado esperado
 
-Puedes escribir el programa en una sola línea o en varias líneas. Ejemplo válido:
+Si el archivo cumple la gramática, el programa muestra aceptación y el TAC correspondiente. Si no cumple la gramática, muestra:
+
+```text
+Cadena no pertenece al lenguaje
+```
+
+## Formato válido de archivos `.txt`
+
+El programa acepta tanto una sola línea como varias líneas. Ambos formatos son válidos:
 
 ```text
 begin entero a; real b; a := 10; b := ( a + 2 ); end
 ```
-
-o bien:
 
 ```text
 begin
@@ -97,15 +144,15 @@ b := ( a + 2 );
 end
 ```
 
-## Notas importantes
+## Observaciones
 
-- El programa solo valida sintaxis y genera TAC.
-- Si la entrada no cumple la estructura esperada, imprime `Cadena no pertenece al lenguaje`.
-- El archivo puede leerse completo desde `.txt`, por lo que ya no es necesario que todo esté en una sola línea.
+- El programa está enfocado en análisis sintáctico y generación de TAC.
+- La verificación de tipos es básica y se limita al registro de variables declaradas.
+- Si la sintaxis no es correcta, se reporta un error general de pertenencia al lenguaje.
 
-## Ejemplo recomendado de prueba
+## Archivo recomendado de prueba
 
-Puedes crear un archivo llamado `prueba_compilador.txt` con este contenido:
+Se recomienda crear un archivo llamado `prueba_compilador.txt` con este contenido:
 
 ```text
 begin
@@ -117,7 +164,7 @@ z := y / 2;
 end
 ```
 
-Luego ejecuta:
+Y luego ejecutar:
 
 ```powershell
 python Compilador_V2.py prueba_compilador.txt
