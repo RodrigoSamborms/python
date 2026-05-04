@@ -1,0 +1,183 @@
+╔════════════════════════════════════════════════════════════════════════════╗
+║                                                                            ║
+║              DOCUMENTACIÓN DE SINTAXIS - RESUMEN ACTUALIZADO              ║
+║                                                                            ║
+╚════════════════════════════════════════════════════════════════════════════╝
+
+
+✅ CAMBIOS REALIZADOS
+════════════════════════════════════════════════════════════════════════════
+
+Se ha agregado documentación COMPLETA sobre la sintaxis de expresiones
+matriciales en los siguientes archivos:
+
+
+📄 1. SINTAXIS_REFERENCIA.txt (NUEVO - REFERENCIA RÁPIDA)
+────────────────────────────────────────────────────────
+
+    🎯 PROPÓSITO: Guía de bolsillo para consulta rápida
+    
+    CONTIENE:
+    ├─ Tabla de operadores (@, +, -)
+    ├─ 3 reglas básicas (nombres, precedencia, paréntesis)
+    ├─ Expresiones válidas e inválidas (con ejemplos)
+    ├─ Detección automática de variables
+    ├─ Normas importantes (mayúsculas, compatibilidad dimensional)
+    ├─ Ejemplos reales para probar (pequeño, mediano, grande)
+    └─ Tips para obtener mejor speedup
+
+    USO: Abre este archivo cuando necesites referencia rápida
+
+
+📄 2. Heuristica_Documentacion.md (ACTUALIZADO)
+────────────────────────────────────────────────
+
+    🎯 PROPÓSITO: Documentación académica completa
+    
+    NUEVA SECCIÓN AGREGADA: "📝 Sintaxis de Expresiones Matriciales"
+    
+    CONTIENE:
+    ├─ Tabla de operadores soportados
+    ├─ 4 reglas de sintaxis detalladas
+    ├─ Ejemplos organizados por categoría
+    ├─ Expresiones inválidas con problemas y soluciones
+    ├─ Inferencia automática de variables (con ejemplos)
+    ├─ Gramática formal BNF para usuarios avanzados
+    └─ Referencias cruzadas a otros archivos
+
+    USO: Consulta cuando necesites entender profundamente
+
+
+📄 3. README.md (ACTUALIZADO)
+──────────────────────────────
+
+    🎯 CAMBIOS: Agregado enlace a SINTAXIS_REFERENCIA.txt
+    
+    NUEVO:
+    └─ Sección "🔤 Sintaxis de Expresiones Matriciales"
+       ├─ Referencia rápida a SINTAXIS_REFERENCIA.txt
+       └─ Referencia a sección en Heuristica_Documentacion.md
+
+
+📄 4. INICIO.txt (ACTUALIZADO)
+───────────────────────────────
+
+    🎯 CAMBIOS: Actualizado con referencia a documentación de sintaxis
+
+
+════════════════════════════════════════════════════════════════════════════
+
+
+🎯 CÓMO USAR LA DOCUMENTACIÓN DE SINTAXIS
+════════════════════════════════════════════════════════════════════════════
+
+ESCENARIO 1: Necesito sintaxis rápida
+└─ ABRE: SINTAXIS_REFERENCIA.txt
+   └─ Encontrarás: operadores, ejemplos, expresiones válidas/inválidas
+
+ESCENARIO 2: Tengo un error de sintaxis
+└─ ABRE: SINTAXIS_REFERENCIA.txt → Sección "❌ EXPRESIONES INVÁLIDAS"
+   └─ Encontrarás: problemas comunes y sus soluciones
+
+ESCENARIO 3: Quiero probar expresiones
+└─ ABRE: SINTAXIS_REFERENCIA.txt → Sección "⚡ EJEMPLOS REALES PARA PROBAR"
+   └─ Encontrarás: expresiones listas para copiar y probar
+
+ESCENARIO 4: Necesito entender profundamente
+└─ ABRE: Heuristica_Documentacion.md → Sección "📝 Sintaxis"
+   └─ Encontrarás: explicación completa, gramática formal, conceptos
+
+ESCENARIO 5: Quiero más speedup
+└─ ABRE: SINTAXIS_REFERENCIA.txt → Sección "🎯 TIPS PARA MEJOR SPEEDUP"
+   └─ Encontrarás: estrategias para operaciones independientes
+
+
+════════════════════════════════════════════════════════════════════════════
+
+
+📋 REFERENCIA RÁPIDA INLINE
+════════════════════════════════════════════════════════════════════════════
+
+OPERADORES:
+  @  → Multiplicación matricial (ej: A @ B)
+  +  → Suma (ej: A + B)
+  -  → Resta (ej: A - B)
+
+REGLAS:
+  • Variables: letras, números, guiones bajos (ej: A, M1, x_2)
+  • Precedencia: @ > +/- (use paréntesis para cambiar)
+  • Espacios: opcionales (A@B = A @ B)
+
+EJEMPLOS COMUNES:
+  (A @ B) + (C @ D)     → Dos multiplicaciones independientes
+  A @ B @ C + D         → Cadena con suma
+  (A @ B + C) @ D       → Suma luego multiplicación
+  ((A + B) @ C)         → Suma primero, luego multiplicación
+
+EXPRESIONES A EVITAR:
+  A B                   → Falta operador (usar @ o +)
+  (A @ B                → Paréntesis no cerrado
+  A @ @ B               → Operador doble
+  1A @ B                → Variable no puede comenzar con número
+
+
+════════════════════════════════════════════════════════════════════════════
+
+
+📊 ESTRUCTURA DOCUMENTACIÓN SINTAXIS
+════════════════════════════════════════════════════════════════════════════
+
+NIVEL 1 (MÁS RÁPIDO)
+└─ SINTAXIS_REFERENCIA.txt
+   └─ ~2 minutos de lectura
+   └─ Tabla rápida + ejemplos
+
+NIVEL 2 (COMPLETO)
+└─ Heuristica_Documentacion.md → Sección "📝 Sintaxis"
+   └─ ~5-10 minutos de lectura
+   └─ Explicaciones detalladas + gramática formal
+
+NIVEL 3 (CÓDIGO)
+└─ matrix_parser.py
+   └─ Ver gramática en comentarios
+   └─ Implementación real del parser
+
+
+════════════════════════════════════════════════════════════════════════════
+
+
+💡 EJEMPLOS DE EXPRESIONES PARA PROBAR
+════════════════════════════════════════════════════════════════════════════
+
+# Copiar directamente a "Expresión matricial:"
+
+(A @ B) + (C @ D)
+A @ B @ C + D
+(A @ B + C) @ D
+(A @ B) + (C @ D) + (E @ F)
+(A @ B + C) @ (D + E @ F)
+A @ B @ C @ D
+(X @ Y) - (Z @ W)
+((A @ B) + C) @ D
+
+
+════════════════════════════════════════════════════════════════════════════
+
+
+✅ VERIFICACIÓN
+════════════════════════════════════════════════════════════════════════════
+
+Archivos con documentación de sintaxis:
+  ✓ SINTAXIS_REFERENCIA.txt (NUEVO)
+  ✓ Heuristica_Documentacion.md (actualizado con sección nueva)
+  ✓ README.md (actualizado con enlace)
+  ✓ INICIO.txt (actualizado)
+
+Estado: LISTO PARA USAR ✓
+
+
+════════════════════════════════════════════════════════════════════════════
+
+PRÓXIMA ETAPA: FASE 2 - ALGORITMO GENÉTICO
+
+╚════════════════════════════════════════════════════════════════════════════╝

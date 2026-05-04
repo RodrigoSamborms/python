@@ -1,0 +1,206 @@
+╔════════════════════════════════════════════════════════════════════════════╗
+║                                                                            ║
+║          HEURÍSTICA PARA OPTIMIZACIÓN DE EXPRESIONES MATRICIALES         ║
+║                         Fase 1: Sistema Base                              ║
+║                                                                            ║
+╚════════════════════════════════════════════════════════════════════════════╝
+
+
+🎯 INICIO RÁPIDO (3 PASOS)
+═════════════════════════════════════════════════════════════════════════════
+
+🧑‍🎓 Notas para estudiantes
+
+- Este archivo (`INICIO.txt`) es una guía rápida. Si estás aprendiendo, sigue los pasos
+  en orden y luego revisa `Heuristica_Documentacion.md` para entender el porqué de cada
+  componente. Experimenta con tamaños de matrices y observa cómo cambia el speedup.
+
+- Ejercicios prácticos: consulta `EJERCICIOS.md` para 5 prácticas guiadas pensadas
+  para estudiantes (ejecutar `demo_fase2.py`, modificar parámetros del AG, etc.).
+
+
+1️⃣  INSTALAR DEPENDENCIAS
+    └─ pip install -r requirements.txt
+
+2️⃣  EJECUTAR LA INTERFAZ INTERACTIVA
+    └─ python main.py
+    └─ Ingresa una expresión como: (A @ B) + (C @ D)
+    └─ Especifica tamaño: 500 (para 500x500)
+
+3️⃣  VER RESULTADOS
+    └─ Comparación automática de serial vs paralelo
+    └─ Speedup y mejora porcentual
+
+
+📚 DOCUMENTACIÓN
+═════════════════════════════════════════════════════════════════════════════
+
+LÉELOS EN ESTE ORDEN:
+
+  1. README.md
+     └─ Descripción general y características
+
+  2. Heuristica_Documentacion.md  ⭐⭐⭐ PRINCIPAL
+     └─ Explicación completa de:
+        • Componentes del sistema
+        • Cómo funcionan parser, generadores, executor
+        • Ejemplos de uso (interactivo y programático)
+        • Interpretación de resultados
+
+  3. ESTRUCTURA.md
+     └─ Diagrama de archivos y flujo de trabajo
+
+  4. HerusiticaProyecto.md
+     └─ Especificación original (contexto académico)
+
+
+🚀 EJEMPLOS DE USO
+═════════════════════════════════════════════════════════════════════════════
+
+EJEMPLO 1: Interfaz Interactiva (RECOMENDADO)
+────────────────────────────────────────────
+$ python main.py
+
+Ingrese una expresión matricial: (A @ B) + (C @ D)
+Tamaño de matrices: 500
+
+Resultado:
+  Serial:   13.95 ms
+  Paralelo: 19.87 ms
+  Speedup:  0.702x
+
+
+EJEMPLO 2: Script Python
+────────────────────────
+$ python mi_experimento.py
+
+from executor import MatrixExpressionExecutor
+import numpy as np
+
+matrices = {
+    'A': np.random.randn(500, 500),
+    'B': np.random.randn(500, 500),
+    'C': np.random.randn(500, 500),
+    'D': np.random.randn(500, 500),
+}
+
+executor = MatrixExpressionExecutor("(A @ B) + (C @ D)", matrices, num_workers=4)
+results = executor.compare(num_runs=3)
+executor.save_code("resultado")
+
+
+📊 EXPRESIONES SOPORTADAS
+═════════════════════════════════════════════════════════════════════════════
+
+✓ (A @ B) + (C @ D)
+  └─ Dos multiplicaciones independientes sumadas
+
+✓ A @ B @ C + D
+  └─ Cadena de multiplicaciones
+
+✓ (A @ B + C) @ (D + E @ F)
+  └─ Expresiones anidadas complejas
+
+Operadores:
+  @ : Multiplicación matricial
+  + : Suma elemento a elemento
+  - : Resta elemento a elemento
+
+SINTAXIS COMPLETA: Ver "Heuristica_Documentacion.md" - Sección "Sintaxis"
+
+
+🔍 ENTENDIENDO LOS RESULTADOS
+═════════════════════════════════════════════════════════════════════════════
+
+Speedup > 1.0
+  ✓ Paralelo es más rápido
+  └─ Hay suficientes operaciones independientes
+
+Speedup < 1.0
+  ✗ Serial es más rápido
+  └─ El overhead de paralelismo no compensa
+  └─ Esto es NORMAL y ESPERADO para matrices pequeñas/medianas
+
+Speedup ≈ 1.0
+  ≈ Rendimiento similar
+
+
+⚡ COMPONENTES PRINCIPALES
+═════════════════════════════════════════════════════════════════════════════
+
+matrix_parser.py
+  └─ Parsea: "(A @ B) + (C @ D)" → AST + grafo de dependencias
+
+code_generator.py
+  └─ Genera dos versiones del código:
+     • Serial: operaciones secuenciales
+     • Paralelo: operaciones con ThreadPoolExecutor
+
+executor.py
+  └─ Ejecuta y mide:
+     • Compila código
+     • Corre múltiples veces (para promediar)
+     • Calcula speedup
+     • Verifica resultados
+
+main.py
+  └─ Interfaz interactiva para usuario
+
+
+💡 CONCEPTOS CLAVE
+═════════════════════════════════════════════════════════════════════════════
+
+DAG (Directed Acyclic Graph)
+  └─ Grafo de dependencias entre operaciones
+  └─ Identifica qué puede ejecutarse en paralelo
+
+Overhead de Paralelismo
+  └─ Costo de crear hilos, sincronizar, cambio de contexto
+  └─ Puede ser > beneficio computacional
+
+Speedup
+  └─ Relación: tiempo_serial / tiempo_paralelo
+  └─ Muestra cuántas veces más rápido es un método
+
+
+🎓 PRÓXIMAS FASES
+═════════════════════════════════════════════════════════════════════════════
+
+Fase 2 (En progreso):
+  └─ Implementar Algoritmo Genético
+  └─ Aprender cuándo paralelizar vs no paralelizar
+
+Fase 3:
+  └─ Estrategias avanzadas de paralelización
+  └─ Multiprocessing, scheduling inteligente
+
+
+🔧 SOLUCIÓN DE PROBLEMAS
+═════════════════════════════════════════════════════════════════════════════
+
+Error: "No module named 'numpy'"
+  └─ pip install numpy
+
+Resultados muy inconsistentes
+  └─ Normal: paralelismo introduce variabilidad
+  └─ Aumentar num_runs para mejor promedio
+
+Siempre speedup < 1.0
+  └─ Aumentar tamaño de matrices
+  └─ Hacer expresiones más complejas
+
+
+📞 CONTACTO / AYUDA
+═════════════════════════════════════════════════════════════════════════════
+
+Ver detalles en: Heuristica_Documentacion.md
+Especificación: HerusiticaProyecto.md
+
+
+╔════════════════════════════════════════════════════════════════════════════╗
+║                                                                            ║
+║  ⭐ COMIENZA AQUÍ: Lee README.md → Heuristica_Documentacion.md            ║
+║                                                                            ║
+║  🚀 EJECUTA AQUÍ: python main.py                                          ║
+║                                                                            ║
+╚════════════════════════════════════════════════════════════════════════════╝

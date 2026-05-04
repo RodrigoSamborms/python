@@ -1,0 +1,165 @@
+╔════════════════════════════════════════════════════════════════════════════╗
+║                     GUÍA RÁPIDA DE SINTAXIS                               ║
+║            Expresiones Matriciales - Referencia de Bolsillo                ║
+╚════════════════════════════════════════════════════════════════════════════╝
+
+
+📋 OPERADORES
+════════════════════════════════════════════════════════════════════════════
+
+  SÍMBOLO    NOMBRE                      EJEMPLO          RESULTADO
+  ─────────────────────────────────────────────────────────────────────────
+  @          Multiplicación matricial    A @ B            Producto matricial
+  +          Suma                        A + B            Suma elemento a elemento
+  -          Resta                       A - B            Resta elemento a elemento
+
+
+📝 REGLAS BÁSICAS
+════════════════════════════════════════════════════════════════════════════
+
+1. NOMBRES DE VARIABLES
+   ├─ Deben comenzar con: letra (A-Z, a-z) o guión bajo (_)
+   ├─ Pueden contener: letras, números, guiones bajos
+   ├─ ✓ Válidos: A, B1, matrix_1, _temp, result
+   └─ ✗ Inválidos: 1A, A-B, @x, A B
+
+2. PRECEDENCIA DE OPERADORES
+   ├─ Alta:  @ (multiplicación matricial)
+   ├─ Baja:  +, - (suma y resta)
+   ├─ Nota: A @ B + C @ D = (A @ B) + (C @ D)
+   └─ Usa () para cambiar precedencia
+
+3. PARÉNTESIS
+   ├─ Controlan el orden de evaluación
+   ├─ Pueden anidarse: ((A @ B) + C) @ D
+   ├─ Deben estar balanceados: ( debe tener )
+   └─ Espacios son opcionales: (A@B)+(C@D) = (A @ B) + (C @ D)
+
+
+✅ EXPRESIONES VÁLIDAS
+════════════════════════════════════════════════════════════════════════════
+
+SIMPLES
+  A @ B           Multiplicación de dos matrices
+  A + B           Suma de dos matrices
+  A - B           Resta de dos matrices
+
+PARES INDEPENDIENTES
+  (A @ B) + (C @ D)     Dos multiplicaciones sumadas
+  (A @ B) - (C @ D)     Dos multiplicaciones restadas
+  (A + B) @ (C + D)     Dos sumas multiplicadas
+
+CADENAS
+  A @ B @ C           Tres multiplicaciones (left-to-right)
+  A @ B + C @ D       Combinada (dos pares + suma)
+  A @ B @ C + D       Encadenada con suma
+
+COMPLEJAS
+  (A @ B + C) @ D                   Suma luego multiplicación
+  ((A @ B) + C) @ (D + E)           Anidada profunda
+  (A @ B + C) @ (D + E @ F)         Muy compleja (¡pero válida!)
+  A @ (B + C) @ D                   Agrupación inteligente
+
+
+❌ EXPRESIONES INVÁLIDAS
+════════════════════════════════════════════════════════════════════════════
+
+ERROR                  PROBLEMA                  SOLUCIÓN
+─────────────────────────────────────────────────────────────────────────
+A B                    Operador faltante         A @ B  o  A + B
+@ A B                  Operador sin operando     A @ B
+A @ @ B                Doble operador            A @ B
+(A @ B                 Paréntesis no cerrado     (A @ B)
+A @ B)                 Paréntesis no abierto     A @ B
+(A) @ (B               Mal balanceados           (A) @ (B)
+A B @                  Orden incorrecto          A @ B
+1A @ B                 Variable comienza número  A1 @ B
+
+
+🔢 VARIABLES AUTOMÁTICAS
+════════════════════════════════════════════════════════════════════════════
+
+El parser detecta automáticamente todas las variables únicas:
+
+  Expresión              Variables detectadas
+  ─────────────────────────────────────────────────────────────────────────
+  (A @ B) + (C @ D)     {A, B, C, D}
+  A @ B @ C + D         {A, B, C, D}
+  (X @ Y + Z)           {X, Y, Z}
+  (M1 @ M2) + (M3 @ M4) {M1, M2, M3, M4}
+
+
+📌 NORMAS IMPORTANTES
+════════════════════════════════════════════════════════════════════════════
+
+1. DIFERENCIA DE MAYÚSCULAS/MINÚSCULAS
+   ├─ A y a son variables DIFERENTES
+   ├─ Usa consistencia: A, B, C (o a, b, c)
+   └─ Mejor: letras mayúsculas para matrices
+
+2. NOMBRES ÚNICOS
+   ├─ Necesitas matrices distintas para cada variable
+   ├─ Si repites: A @ A es válido (misma matriz multiplicada)
+   └─ Ejemplo: (A @ A) + (A @ A) usa una sola matriz A
+
+3. COMPATIBILIDAD DIMENSIONAL
+   ├─ Multiplicación: A(m×n) @ B(n×p) → resultado(m×p)
+   ├─ Para que A @ B funcione: columnas(A) = filas(B)
+   ├─ Suma/Resta: A y B deben tener misma shape
+   └─ El código no valida esto (Python lo hará al ejecutar)
+
+4. ESPACIOS Y FORMATO
+   ├─ Los espacios son completamente opcionales
+   ├─ A@B = A @ B = A @ B (todos válidos)
+   ├─ Pero con espacios es más legible
+   └─ Recomendación: A @ B @ C + D
+
+
+⚡ EJEMPLOS REALES PARA PROBAR
+════════════════════════════════════════════════════════════════════════════
+
+Pequeño (tamaño 100):
+  ✓ A + B
+  ✓ A @ B
+  ✓ (A @ B) + C
+  ✓ (A + B) @ C
+
+Mediano (tamaño 300):
+  ✓ (A @ B) + (C @ D)
+  ✓ A @ B @ C + D
+  ✓ (A @ B + C) @ D
+  ✓ (A @ B) + (C @ D) + (E @ F)
+
+Grande (tamaño 500+):
+  ✓ (A @ B + C @ D) @ (E @ F + G @ H)
+  ✓ A @ B @ C @ D + E @ F
+  ✓ (A @ B + C) @ (D + E @ F)
+
+
+🎯 TIPS PARA OBTENER MEJOR SPEEDUP
+════════════════════════════════════════════════════════════════════════════
+
+PARA MÁS PARALELISMO (speedup > 1.0):
+  ✓ Aumentar número de operaciones independientes
+  ✓ Aumentar tamaño de matrices
+  ✓ Ejemplo: (A @ B + C @ D + E @ F) @ G
+
+PARA CASO SERIAL (speedup < 1.0):
+  ✗ Cadenas largas de dependencias
+  ✗ Matrices pequeñas
+  ✗ Ejemplo: A @ B @ C @ D @ E @ F
+
+
+📖 PARA MÁS INFORMACIÓN
+════════════════════════════════════════════════════════════════════════════
+
+Ver: Heuristica_Documentacion.md
+     Sección: "📝 Sintaxis de Expresiones Matriciales"
+
+
+╔════════════════════════════════════════════════════════════════════════════╗
+║                                                                            ║
+║  REGLA DE ORO: Las operaciones independientes se pueden paralelizar,      ║
+║                las dependientes NO. El parser detecta automáticamente.     ║
+║                                                                            ║
+╚════════════════════════════════════════════════════════════════════════════╝
