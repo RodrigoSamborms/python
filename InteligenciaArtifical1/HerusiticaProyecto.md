@@ -117,3 +117,26 @@ Una herramienta demostrativa que:
 - Compare contra ejecucion secuencial y reporte resultados.
 
 Con esto se evidencia el uso practico de metaheuristicas para toma de decisiones en optimizacion de rendimiento.
+
+## 13. Glosario
+
+### DAG
+Grafo aciclico dirigido. Es una estructura donde los nodos representan operaciones y las flechas representan dependencias entre ellas. Se usa para saber que tareas pueden ejecutarse en paralelo y cuales deben esperar a que otras terminen.
+
+### Fitness
+Funcion de evaluacion usada por el algoritmo genetico para medir que tan buena es una solucion. En este proyecto, el fitness puede representar el tiempo total estimado de ejecucion y otras penalizaciones.
+
+### Overhead
+Costo extra que no pertenece al calculo principal, por ejemplo la creacion de hilos, la sincronizacion y la administracion de tareas paralelas.
+
+### Paralelismo
+Ejecucion simultanea de dos o mas tareas independientes para reducir el tiempo total de procesamiento.
+
+### Secuencial
+Forma tradicional de ejecucion donde las operaciones se realizan una despues de otra, respetando el orden original.
+
+### Metaheuristica
+Estrategia de busqueda aproximada que ayuda a encontrar buenas soluciones en problemas complejos donde probar todas las combinaciones seria muy costoso.
+
+### Parentizacion
+Forma en que se agrupan las operaciones en una expresion. Cambiar la parentizacion puede modificar el costo de calculo.
