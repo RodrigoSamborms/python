@@ -395,12 +395,19 @@ def analizar(entrada):
                 t.valor = t.valor
         p = Parser(iter(toks))
         p.parse_programa()
-        print('Cadena pertenece al lenguaje')
-        print('\nCódigo de tres direcciones:')
+        output_lines = []
+        output_lines.append('Cadena pertenece al lenguaje')
+        output_lines.append('')
+        output_lines.append('Código de tres direcciones:')
         for ln in p.code:
-            print(ln)
+            output_lines.append(ln)
+        outpath = Path(__file__).parent / 'resultado_compilador.txt'
+        outpath.write_text('\n'.join(output_lines), encoding='utf-8')
+        print(f'Salida guardada en {outpath}')
     except SyntaxError as e:
-        print('Cadena no pertenece al lenguaje')
+        outpath = Path(__file__).parent / 'resultado_compilador.txt'
+        outpath.write_text('Cadena no pertenece al lenguaje\n', encoding='utf-8')
+        print(f'Salida guardada en {outpath}')
 
 
 def cargar_entrada(argv):

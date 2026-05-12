@@ -1,0 +1,11 @@
+Cadena pertenece al lenguaje
+
+Código de tres direcciones:
+# decl x : entero
+# decl y : entero
+# decl z : real
+x := 5
+t1 := x + 2
+y := t1
+t2 := y / 2
+z := t2
