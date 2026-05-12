@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AFD del Lexer - Compilador_V2</title>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 14px;
+        }
+        .diagram-container {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 20px;
+            overflow-x: auto;
+            border: 1px solid #e9ecef;
+        }
+        .mermaid {
+            display: flex;
+            justify-content: center;
+        }
+        .legend {
+            margin-top: 30px;
+            padding: 20px;
+            background: #f0f7ff;
+            border-left: 4px solid #667eea;
+            border-radius: 4px;
+        }
+        .legend h3 {
+            margin-top: 0;
+            color: #667eea;
+        }
+        .legend-item {
+            margin: 10px 0;
+            display: flex;
+            align-items: center;
+        }
+        .legend-color {
+            width: 30px;
+            height: 20px;
+            border-radius: 3px;
+            margin-right: 10px;
+            border: 1px solid #ddd;
+        }
+        .info {
+            margin-top: 20px;
+            padding: 15px;
+            background: #fff3cd;
+            border: 1px solid #ffc107;
+            border-radius: 4px;
+            color: #856404;
+            font-size: 13px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔤 Autómata Finito Determinista (AFD) del Lexer</h1>
+        <p class="subtitle">Compilador_V2.py - Analizador Léxico</p>
+        
+        <div class="diagram-container">
+            <div class="mermaid">
+graph TD
+    START["q0<br/>INICIO"] 
+    
+    START -->|dígito| NUM1["q1<br/>NUMERO"]
+    NUM1 -->|dígito| NUM1
+    NUM1 -->|punto| NUM2["q2<br/>NUMERO.decimal"]
+    NUM2 -->|dígito| NUM2
+    NUM2 -->|otro| ACCEPT_NUM["✓ NUMBER"]
+    NUM1 -->|otro| ACCEPT_NUM
+    
+    START -->|letra| ID1["q3<br/>IDENTIFICADOR"]
+    ID1 -->|letra/dígito| ID1
+    ID1 -->|otro| ACCEPT_ID["✓ ID o keyword"]
+    
+    START -->|dos puntos| COL["q4<br/>colon"]
+    COL -->|igual| ACCEPT_ASSIGN["✓ ASSIGN"]
+    COL -->|otro| ERROR1["✗ Error"]
+    
+    START -->|menor| LT1["q5<br/>comparador"]
+    LT1 -->|igual| ACCEPT_LE["✓ LE"]
+    LT1 -->|mayor| ACCEPT_NE["✓ NE"]
+    LT1 -->|otro| ACCEPT_LT["✓ LT"]
+    
+    START -->|mayor| GT1["q6<br/>comparador"]
+    GT1 -->|igual| ACCEPT_GE["✓ GE"]
+    GT1 -->|otro| ACCEPT_GT["✓ GT"]
+    
+    START -->|igual| ACCEPT_EQ["✓ EQ"]
+    
+    START -->|plus| ACCEPT_PLUS["✓ PLUS"]
+    START -->|menos| ACCEPT_MINUS["✓ MINUS"]
+    START -->|asterisco| ACCEPT_TIMES["✓ TIMES"]
+    START -->|slash| ACCEPT_DIV["✓ DIV"]
+    START -->|paréntesis| ACCEPT_LPAREN["✓ LPAREN"]
+    START -->|paréntesis| ACCEPT_RPAREN["✓ RPAREN"]
+    START -->|coma| ACCEPT_COMMA["✓ COMMA"]
+    START -->|semicolon| ACCEPT_SEMI["✓ SEMI"]
+    START -->|punto| ACCEPT_DOT["✓ DOT"]
+    
+    START -->|espacio| ACCEPT_SKIP["✓ SKIP"]
+    
+    START -->|otro| ACCEPT_ERROR["✗ MISMATCH"]
+    
+    style START fill:#e1f5ff,stroke:#01579b,stroke-width:3px,color:#000
+    style NUM1 fill:#e8f5e9,stroke:#2e7d32,stroke-width:2px,color:#000
+    style NUM2 fill:#e8f5e9,stroke:#2e7d32,stroke-width:2px,color:#000
+    style ID1 fill:#e8f5e9,stroke:#2e7d32,stroke-width:2px,color:#000
+    style COL fill:#e8f5e9,stroke:#2e7d32,stroke-width:2px,color:#000
+    style LT1 fill:#e8f5e9,stroke:#2e7d32,stroke-width:2px,color:#000
+    style GT1 fill:#e8f5e9,stroke:#2e7d32,stroke-width:2px,color:#000
+    
+    style ACCEPT_NUM fill:#c8e6c9,stroke:#1b5e20,stroke-width:2px,color:#000
+    style ACCEPT_ID fill:#c8e6c9,stroke:#1b5e20,stroke-width:2px,color:#000
+    style ACCEPT_ASSIGN fill:#c8e6c9,stroke:#1b5e20,stroke-width:2px,color:#000
+    style ACCEPT_LE fill:#c8e6c9,stroke:#1b5e20,stroke-width:2px,color:#000
+    style ACCEPT_GE fill:#c8e6c9,stroke:#1b5e20,stroke-width:2px,color:#000
+    style ACCEPT_NE fill:#c8e6c9,stroke:#1b5e20,stroke-width:2px,color:#000
+    style ACCEPT_LT fill:#c8e6c9,stroke:#1b5e20,stroke-width:2px,color:#000
+    style ACCEPT_GT fill:#c8e6c9,stroke:#1b5e20,stroke-width:2px,color:#000
+    style ACCEPT_EQ fill:#c8e6c9,stroke:#1b5e20,stroke-width:2px,color:#000
+    style ACCEPT_PLUS fill:#c8e6c9,stroke:#1b5e20,stroke-width:2px,color:#000
+    style ACCEPT_MINUS fill:#c8e6c9,stroke:#1b5e20,stroke-width:2px,color:#000
+    style ACCEPT_TIMES fill:#c8e6c9,stroke:#1b5e20,stroke-width:2px,color:#000
+    style ACCEPT_DIV fill:#c8e6c9,stroke:#1b5e20,stroke-width:2px,color:#000
+    style ACCEPT_LPAREN fill:#c8e6c9,stroke:#1b5e20,stroke-width:2px,color:#000
+    style ACCEPT_RPAREN fill:#c8e6c9,stroke:#1b5e20,stroke-width:2px,color:#000
+    style ACCEPT_COMMA fill:#c8e6c9,stroke:#1b5e20,stroke-width:2px,color:#000
+    style ACCEPT_SEMI fill:#c8e6c9,stroke:#1b5e20,stroke-width:2px,color:#000
+    style ACCEPT_DOT fill:#c8e6c9,stroke:#1b5e20,stroke-width:2px,color:#000
+    style ACCEPT_SKIP fill:#ffeb3b,stroke:#f57f17,stroke-width:2px,color:#000
+    style ACCEPT_ERROR fill:#ffcdd2,stroke:#b71c1c,stroke-width:2px,color:#000
+    style ERROR1 fill:#ffcdd2,stroke:#b71c1c,stroke-width:2px,color:#000
+            </div>
+        </div>
+        
+        <div class="legend">
+            <h3>📋 Leyenda de Colores y Estados</h3>
+            
+            <div class="legend-item">
+                <div class="legend-color" style="background-color: #e1f5ff;"></div>
+                <strong>q0 (Estado Inicial):</strong> Punto de entrada del autómata. Analiza el primer carácter.
+            </div>
+            
+            <div class="legend-item">
+                <div class="legend-color" style="background-color: #e8f5e9;"></div>
+                <strong>Estados Intermedios (q1-q6):</strong> Estados transitorios que acumulan caracteres para reconocer tokens multi-carácter.
+            </div>
+            
+            <div class="legend-item">
+                <div class="legend-color" style="background-color: #c8e6c9;"></div>
+                <strong>Estados Aceptación (✓):</strong> Estados finales aceptadores. Reconocen un token válido.
+            </div>
+            
+            <div class="legend-item">
+                <div class="legend-color" style="background-color: #ffeb3b;"></div>
+                <strong>SKIP:</strong> Token especial que se ignora (espacios, tabulaciones).
+            </div>
+            
+            <div class="legend-item">
+                <div class="legend-color" style="background-color: #ffcdd2;"></div>
+                <strong>Rechazo (✗):</strong> Estados de error. Caracteres no reconocidos.
+            </div>
+        </div>
+        
+        <div class="info">
+            <strong>ℹ️ Información técnica:</strong><br>
+            Este AFD implementa el análisis léxico mediante expresiones regulares compiladas en un solo paso. 
+            Reconoce 18 tipos de tokens diferentes: números, identificadores, operadores aritméticos, 
+            comparadores, asignación, delimitadores y palabras clave.
+            <br><br>
+            <strong>Tokens reconocidos:</strong> NUMBER, ID, LE, GE, NE, ASSIGN, EQ, LT, GT, PLUS, MINUS, TIMES, DIV, LPAREN, RPAREN, COMMA, SEMI, DOT
+        </div>
+    </div>
+
+    <script>
+        mermaid.initialize({ startOnLoad: true, theme: 'default' });
+        mermaid.contentLoaded();
+    </script>
+</body>
+</html>
