@@ -66,35 +66,25 @@ class ValidadorExpresion:
         tokens_postfix = self._convertir_a_postfix(expresion)
         pila_nodos = []
         
-        print("\n--- FASE 1: ANALIZANDO COMPATIBILIDAD Y CONSTRUYENDO GRAFO ---")
-        
         for token in tokens_postfix:
             if token.isupper():
                 dim = self.matrices_dimensiones[token]
                 nodo_matriz = NodoGrafo(token, 'MATRIZ', dim)
                 pila_nodos.append(nodo_matriz)
             else:
-                if len(pila_nodos) < 2: 
-                    print("[ERROR]: Expresión mal formada.")
-                    return None
-                
+                if len(pila_nodos) < 2: return None
                 nodo_derecho = pila_nodos.pop()
                 nodo_izquierdo = pila_nodos.pop()
                 
                 if token == '*':
                     if nodo_izquierdo.dimensiones[1] != nodo_derecho.dimensiones[0]:
-                        print(f"\n[ERROR MATEMÁTICO]: No se puede multiplicar {nodo_izquierdo.nombre} con {nodo_derecho.nombre}.")
-                        print(f"Dimensiones incompatibles: {nodo_izquierdo.dimensiones[0]}x{nodo_izquierdo.dimensiones[1]} * {nodo_derecho.dimensiones[0]}x{nodo_derecho.dimensiones[1]}")
+                        print(f"[ERROR MATEMÁTICO]: No se pueden sumar dimensiones distintas...")
                         return None
                     dim_res = (nodo_izquierdo.dimensiones[0], nodo_derecho.dimensiones[1])
                     nombre_op = f"Multiplicacion_{self.contador_ops['*']}"
                     self.contador_ops['*'] += 1
-                    
                 elif token == '+':
-                    # COMPROBACIÓN ESTRICTA DE LA SUMA
-                    if nodo_izquierdo.dimensiones[0] != nodo_derecho.dimensiones[0] or nodo_izquierdo.dimensiones[1] != nodo_derecho.dimensiones[1]:
-                        print(f"\n[ERROR MATEMÁTICO EN SUMA]: No se pueden sumar los resultados de las operaciones.")
-                        print(f"Intento de sumar una matriz de {nodo_izquierdo.dimensiones[0]}x{nodo_izquierdo.dimensiones[1]} con una de {nodo_derecho.dimensiones[0]}x{nodo_derecho.dimensiones[1]}")
+                    if nodo_izquierdo.dimensiones != nodo_derecho.dimensiones:
                         return None
                     dim_res = nodo_izquierdo.dimensiones
                     nombre_op = f"Suma_{self.contador_ops['+']}"
@@ -102,11 +92,8 @@ class ValidadorExpresion:
                 
                 nodo_op = NodoGrafo(nombre_op, 'OPERACION', dim_res, nodo_izquierdo, nodo_derecho)
                 pila_nodos.append(nodo_op)
-                print(f"  ✔ Validando operación: {nombre_op} [{dim_res[0]}x{dim_res[1]}]")
         
-        raiz_grafo = pila_nodos[0]
-        print("\n[ÉXITO]: Estructura matemática perfectamente válida.")
-        return raiz_grafo
+        return pila_nodos[0]
 
 class OptimizadorProcesos:
     def __init__(self, raiz_grafo, overhead_hilo=50000):
@@ -222,19 +209,14 @@ class OptimizadorProcesos:
         print(f"\nTiempo estimado óptimo de ejecución: {mejor_costo} ciclos de reloj.")
         return mejor_solucion
 
-# --- BLOQUE PRINCIPAL CORREGIDO ---
+# --- PRUEBA DEL SISTEMA COMPLETO ---
 if __name__ == "__main__":
     validador = ValidadorExpresion()
     expresion, dimensiones = validador.solicitar_datos()
     
     if expresion:
         raiz = validador.construir_y_validar_grafo(expresion)
-        
-        # Si 'raiz' es None, significa que la Fase 1 detectó un error matemático y detuvo el proceso
-        if raiz is not None:
-            # Cambia el overhead de 50000 a 10000 para esta prueba
-            #optimizador = OptimizadorProcesos(raiz, overhead_hilo=50000)
-            optimizador = OptimizadorProcesos(raiz, overhead_hilo=10000)
+        if raiz:
+            # Le pasamos el grafo al optimizador. Fijamos un overhead simulado de 50,000 ciclos.
+            optimizador = OptimizadorProcesos(raiz, overhead_hilo=50000)
             optimizador.optimizar_con_recocido_simulado()
-        else:
-            print("\n[PROCESO DETENIDO]: La optimización (Fase 2) se canceló debido a errores en las dimensiones.")
